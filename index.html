@@ -1,0 +1,89 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Tree editor</title>
+  <meta name="description" content="Tree editor">
+  <meta name="author" content="Serafim Nenarokov">
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button id="open-button" class="btn btn-outline-success my-2 mr-1" data-toggle="modal" data-target="#openTreeModal">
+      <i class="oi oi-folder"></i> Open tree
+    </button>
+    <button id="apply-button" class="btn btn-outline-success my-2 mr-1" type="button" data-toggle="modal" data-target="#applyCSVModal">
+      <span class="oi oi-arrow-bottom"></span> Apply csv
+    </button>
+    <button id="save-button" class="btn btn-outline-success my-2 mr-1" type="button">
+      <span class="oi oi-data-transfer-download"></span> Save to csv
+    </button>
+  </nav>
+
+  <div id="svg" width="80%"></div>
+
+  <!-- MODALS -->
+  <div class="modal" id="openTreeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Open a new tree</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <input type="file" class="form-control-file" id="openTreeInput" accept=".svg">
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="openTreeButton">
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span> Open
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="applyCSVModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Apply annotation from csv file</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <input type="file" class="form-control-file" id="applyCSVFileInput" accept=".csv">
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="applyCSVFileButton">
+            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span> Apply
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END MODALS -->
+
+  <script src="js/jquery-3.4.0.min.js"></script>
+  <script src="js/underscore-min.js"></script>
+  <script src="js/svg.min.js"></script>
+  <script src="js/snap.svg-min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/scripts.js"></script>
+</body>
+</html>
