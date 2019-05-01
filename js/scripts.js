@@ -185,8 +185,7 @@ function openSVG(raw_svg) {
   elements = {};
 
   $("#svg").append(raw_svg);
-  var svg = Snap("#svg > svg");
-  pdf = svg;
+  svg = Snap("#svg > svg");
 
   _.each(svg.selectAll("text"), function(el){
     var taxa = el.attr("text");
@@ -216,7 +215,7 @@ function openSVG(raw_svg) {
   }
 };
 
-var pdf = null;
+var svg = null;
 var elm = null;
 var elements = {};
 var title = null;
@@ -272,6 +271,25 @@ $('#save-button').on("click", function(){
 
     download(text, filename);
   }
+});
+
+var tmp;
+$("#moveClassesLeft").on("click", function(){
+  _.each(svg.selectAll("text"), function(el){
+    if (elementIsClass(el)){
+      x = el.getBBox().x;
+      el.animate({x: x-25}, 500);
+    }
+  })
+});
+
+$("#moveClassesRight").on("click", function(){
+  _.each(svg.selectAll("text"), function(el){
+    if (elementIsClass(el)){
+      x = el.getBBox().x;
+      el.animate({x: x+25}, 500);
+    }
+  })
 });
 
 
