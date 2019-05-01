@@ -206,10 +206,20 @@ function openSVG(raw_svg) {
       el.animate({x: 200}, 100);
     }
   });
+
+  title = _.find(svg.selectAll("text"), function(el){
+    return el.attr("text").match(/^\</g);
+  });
+
+  if (title != null){
+    title = title.node.textContent.replace(/[<>]/g, '').split(".")[0];
+  }
 };
+
 var pdf = null;
 var elm = null;
 var elements = {};
+var title = null;
 
 $('#openTreeButton').on("click", function(modal_e){
   var file = $('#openTreeInput')[0].files[0];
@@ -254,7 +264,13 @@ $('#applyCSVFileButton').on("click", function(modal_e){
 $('#save-button').on("click", function(){
   text = buildCsv(elements);
   if (text != null){
-    download(text, "tree.tsv");
+
+    var filename = "tree.tsv";
+    if (title != null){
+      filename = title + "_parsed.tsv";
+    }
+
+    download(text, filename);
   }
 });
 
