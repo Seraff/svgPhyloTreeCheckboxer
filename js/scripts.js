@@ -147,7 +147,7 @@ function buildCsv(elements) {
       elementWithoutMode = val;
       alert("You need to specify all the modes");
     }
-    var klass = val.class.textContent.replace(/^\s+|\s+$/g, '');
+    var klass = val.class.textContent.replace(/^\s+|\s+$/g, '').replace(/[\[|\]]/g, '');
     text += key + "\t" + klass + "\t" + mode + "\n";
   });
 
