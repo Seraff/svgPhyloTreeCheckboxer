@@ -186,6 +186,7 @@ function openSVG(raw_svg) {
 
   $("#svg").append(raw_svg);
   svg = Snap("#svg > svg");
+  $("#svg > svg").find("title").empty();
 
   _.each(svg.selectAll("text"), function(el){
     var taxa = el.attr("text");
