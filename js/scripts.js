@@ -274,7 +274,6 @@ $('#save-button').on("click", function(){
   }
 });
 
-var tmp;
 $("#moveClassesLeft").on("click", function(){
   _.each(svg.selectAll("text"), function(el){
     if (elementIsClass(el)){
@@ -293,4 +292,25 @@ $("#moveClassesRight").on("click", function(){
   })
 });
 
+$("#svg > svg").css({width: "50%"});
 
+function getTreeZoom(){
+  return( 100 * parseFloat($("#svg > svg").css('width')) / parseFloat($("#svg > svg").parent().css('width')) );
+
+}
+
+$("#zoomIn").on("click", function(){
+  zoom = getTreeZoom();
+  zoom += 10;
+  $("#svg > svg").css({width: zoom+"%"});
+});
+
+$("#zoomFit").on("click", function(){
+  $("#svg > svg").css({width: "100%"});
+});
+
+$("#zoomOut").on("click", function(){
+  zoom = getTreeZoom();
+  zoom -= 10;
+  $("#svg > svg").css({width: zoom+"%"});
+});
