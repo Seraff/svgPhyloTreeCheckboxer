@@ -231,6 +231,8 @@ function openSVG(raw_svg) {
   if (title != null){
     title = title.node.textContent.replace(/[<>]/g, '').split(".")[0];
   }
+
+  tsv_applied = false;
 };
 
 var svg = null;
