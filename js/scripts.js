@@ -1,3 +1,5 @@
+'use strict';
+
 function download(data, filename) {
     var file = new Blob([data], {type: "text/plain"});
     if (window.navigator.msSaveOrOpenBlob) // IE10+
@@ -60,8 +62,8 @@ function TypeSelector() {
     },
 
     draw: function () {
-      w = me.taxa.getBBox().width + 5;
-      h = me.taxa.getBBox().height / 2 - 5;
+      var w = me.taxa.getBBox().width + 5;
+      var h = me.taxa.getBBox().height / 2 - 5;
 
       me.ort_box = me.svg.rect(w, h, me.size, me.size);
       me.ort_box.attr({class: "checkmark", fill: "#a3ffb8",});
@@ -123,6 +125,20 @@ function TypeSelector() {
 
       me.mode = new_mode;
       me.redrawMark();
+    },
+
+    remove: function(){
+      me.ort_box.remove();
+      me.ort_mark.remove();
+      me.ort_shape.remove();
+
+      me.par_box.remove();
+      me.par_mark.remove();
+      me.par_shape.remove();
+
+      me.del_box.remove();
+      me.del_mark.remove();
+      me.del_shape.remove();
     }
   }
 
@@ -139,7 +155,7 @@ function elementIsClass(el){
 }
 
 function buildCsv(elements) {
-  text = "";
+  var text = "";
   var elementWithoutMode = null
   _.each(elements, function(val, key){
     var mode = val.type_selector.mode;
@@ -167,9 +183,9 @@ function applyCSV(data) {
 
       line = line.replace(/^\s+|\s+$/g, '').split("\t");
 
-      taxa = line[0];
-      klass = line[1];
-      mode = line[2].replace(/\*/g, '');
+      var taxa = line[0];
+      var klass = line[1];
+      var mode = line[2].replace(/\*/g, '');
 
       if(elements[taxa] != undefined){
         elements[taxa].type_selector.changeMode(mode);
@@ -181,8 +197,13 @@ function applyCSV(data) {
 }
 
 function openSVG(raw_svg) {
+  _.each( elements, function( val, key ) {
+    val.type_selector.remove();
+  });
+
   $("#svg").empty();
   elements = {};
+  svg = null;
 
   $("#svg").append(raw_svg);
   svg = Snap("#svg > svg");
@@ -196,12 +217,7 @@ function openSVG(raw_svg) {
 
       var klass = el.node.parentElement.nextElementSibling
       elements[taxa] = { element: el, class: klass, type_selector: ch};
-      if (elm == null){
-        elm = el;
-      }
-      if(klass.textContent.replace(/^\s+|\s+$/g, '')[0] != "["){
-        // console.log(klass);
-      }
+
     } else if (elementIsClass(el)){
       el.animate({x: 200}, 100);
     }
@@ -217,7 +233,6 @@ function openSVG(raw_svg) {
 };
 
 var svg = null;
-var elm = null;
 var elements = {};
 var title = null;
 
@@ -242,6 +257,10 @@ $('#openTreeButton').on("click", function(modal_e){
 });
 
 $('#applyCSVFileButton').on("click", function(modal_e){
+  if (!confirm('Are you sure? All unsaved data will be lost.')){
+    return undefined;
+  }
+
   var file = $('#applyCSVFileInput')[0].files[0];
 
   if (file != undefined){
@@ -262,7 +281,7 @@ $('#applyCSVFileButton').on("click", function(modal_e){
 });
 
 $('#save-button').on("click", function(){
-  text = buildCsv(elements);
+  var text = buildCsv(elements);
   if (text != null){
 
     var filename = "tree.tsv";
@@ -277,7 +296,7 @@ $('#save-button').on("click", function(){
 $("#moveClassesLeft").on("click", function(){
   _.each(svg.selectAll("text"), function(el){
     if (elementIsClass(el)){
-      x = el.getBBox().x;
+      var x = el.getBBox().x;
       el.animate({x: x-25}, 500);
     }
   })
@@ -286,7 +305,7 @@ $("#moveClassesLeft").on("click", function(){
 $("#moveClassesRight").on("click", function(){
   _.each(svg.selectAll("text"), function(el){
     if (elementIsClass(el)){
-      x = el.getBBox().x;
+      var x = el.getBBox().x;
       el.animate({x: x+25}, 500);
     }
   })
@@ -300,7 +319,7 @@ function getTreeZoom(){
 }
 
 $("#zoomIn").on("click", function(){
-  zoom = getTreeZoom();
+  var zoom = getTreeZoom();
   zoom += 10;
   $("#svg > svg").css({width: zoom+"%"});
 });
@@ -310,7 +329,7 @@ $("#zoomFit").on("click", function(){
 });
 
 $("#zoomOut").on("click", function(){
-  zoom = getTreeZoom();
+  var zoom = getTreeZoom();
   zoom -= 10;
   $("#svg > svg").css({width: zoom+"%"});
 });
