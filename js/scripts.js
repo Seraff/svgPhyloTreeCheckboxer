@@ -175,7 +175,6 @@ function buildCsv(elements) {
 }
 
 function applyCSV(data) {
-  // TODO
   var lines = data.split("\n");
 
   _.each(lines, function(line){
@@ -194,6 +193,8 @@ function applyCSV(data) {
       }
     }
   });
+
+  tsv_applied = true;
 }
 
 function openSVG(raw_svg) {
@@ -235,6 +236,7 @@ function openSVG(raw_svg) {
 var svg = null;
 var elements = {};
 var title = null;
+var tsv_applied = false;
 
 $('#openTreeButton').on("click", function(modal_e){
   var file = $('#openTreeInput')[0].files[0];
@@ -257,7 +259,7 @@ $('#openTreeButton').on("click", function(modal_e){
 });
 
 $('#applyCSVFileButton').on("click", function(modal_e){
-  if (!confirm('Are you sure? All unsaved data will be lost.')){
+  if (tsv_applied && !confirm('Are you sure? All unsaved data will be lost.')){
     return undefined;
   }
 
