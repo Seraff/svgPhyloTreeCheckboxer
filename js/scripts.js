@@ -229,7 +229,7 @@ function openSVG(raw_svg) {
   });
 
   if (title != null){
-    title = title.node.textContent.replace(/[<>]/g, '').split(".")[0];
+    title = title.node.textContent.replace(/[<>]/g, '').split(/[\.\s]/)[0];
   }
 
   tsv_applied = false;
