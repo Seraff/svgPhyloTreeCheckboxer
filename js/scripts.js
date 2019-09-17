@@ -197,6 +197,33 @@ function applyCSV(data) {
   tsv_applied = true;
 }
 
+function checkOrtologsDuplication() {
+  var orts_cnt = {};
+
+  _.each( elements, function( val, key ) {
+    if (val.type_selector.mode == "o"){
+      var taxa_name = key.split("_")[0];
+      if (orts_cnt[taxa_name]){
+        orts_cnt[taxa_name] += 1;
+      } else {
+        orts_cnt[taxa_name] = 1;
+      }
+    }
+  });
+
+  var error_msg = null;
+  _.each(orts_cnt, function( val, key ){
+    if (val > 1){
+      if (error_msg == null)
+        error_msg = [];
+
+      error_msg.push(key + " (" + val + ")")
+    }
+  });
+
+  return error_msg;
+}
+
 function openSVG(raw_svg) {
   _.each( elements, function( val, key ) {
     val.type_selector.remove();
@@ -284,7 +311,7 @@ $('#applyCSVFileButton').on("click", function(modal_e){
   }
 });
 
-$('#save-button').on("click", function(){
+function generateAndDownloadTsv(){
   var text = buildCsv(elements);
   if (text != null){
 
@@ -295,7 +322,30 @@ $('#save-button').on("click", function(){
 
     download(text, filename);
   }
+}
+
+$('#save-button').on("click", function(){
+
+  var alert_msgs = checkOrtologsDuplication();
+
+  if (alert_msgs != null){
+    $("#tsv-alert-body").html("");
+
+    _.each(alert_msgs, function(el){
+      $("#tsv-alert-body").append(el+"</br>")
+    });
+
+    $("#AlertModal").modal("show");
+  } else
+    generateAndDownloadTsv();
+
 });
+
+$("#save-anyway").on("click", function(){
+  $("#AlertModal").modal("toggle");
+  generateAndDownloadTsv();
+});
+
 
 $("#moveClassesLeft").on("click", function(){
   _.each(svg.selectAll("text"), function(el){
