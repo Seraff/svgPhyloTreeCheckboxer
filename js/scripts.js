@@ -202,7 +202,7 @@ function checkOrtologsDuplication() {
 
   _.each( elements, function( val, key ) {
     if (val.type_selector.mode == "o"){
-      var taxa_name = key.split("_")[0];
+      var taxa_name = key.split("@").slice(-1).pop();
       if (orts_cnt[taxa_name]){
         orts_cnt[taxa_name] += 1;
       } else {
