@@ -197,12 +197,16 @@ function applyCSV(data) {
   tsv_applied = true;
 }
 
+function extractTaxaName(full_name){
+  return full_name.split("@").slice(-1).pop().split("..p")[0];
+}
+
 function checkOrtologsDuplication() {
   var orts_cnt = {};
 
   _.each( elements, function( val, key ) {
     if (val.type_selector.mode == "o"){
-      var taxa_name = key.split("@").slice(-1).pop();
+      var taxa_name = extractTaxaName(key);
       if (orts_cnt[taxa_name]){
         orts_cnt[taxa_name] += 1;
       } else {
