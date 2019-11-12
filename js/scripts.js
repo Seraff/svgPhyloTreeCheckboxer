@@ -55,8 +55,10 @@ function TypeSelector() {
       me.ort_box = null;
       me.par_box = null;
       me.del_box = null;
+      me.old_mode_box = null;
 
       me.mode = mode;
+      me.old_mode = null;
 
       return me
     },
@@ -84,6 +86,14 @@ function TypeSelector() {
       me.del_mark = me.svg.image("img/d.svg", w+1, h-1, 10, 10);
       me.del_shape = me.svg.group(me.del_box, me.del_mark);
       me.par_shape.after(me.del_shape);
+
+      w = w + me.del_box.getBBox().width + 20;
+      me.old_mode_box = me.svg.rect(w, h, me.size, me.size);
+      me.old_mode_box.attr({class: "checkmark", fill: "#dbdbdb", stroke: "#b0b0b0"});
+      me.old_mode_text = me.svg.text(w+1.5, h+8, "");
+      me.old_mode_text.attr({'font-family': 'serif', 'font-weight': 'normal', fill: "#3d3d3d", 'stroke-width': 0, 'font-size': '12'});
+      me.old_mode_shape = me.svg.group(me.old_mode_box, me.old_mode_text);
+      me.del_shape.after(me.old_mode_shape);
 
       me.ort_shape.click(function(){
         me.changeMode('o');
@@ -127,6 +137,16 @@ function TypeSelector() {
       me.redrawMark();
     },
 
+    setOldMode: function(old_mode){
+      me.old_mode = old_mode;
+      me.old_mode_text.attr({text: old_mode});
+    },
+
+    removeOldMode: function(old_mode){
+      me.old_mode = null;
+      me.old_mode_text.attr({text: ''});
+    },
+
     remove: function(){
       me.ort_box.remove();
       me.ort_mark.remove();
@@ -159,12 +179,20 @@ function buildCsv(elements) {
   var elementWithoutMode = null
   _.each(elements, function(val, key){
     var mode = val.type_selector.mode;
+
     if (elementWithoutMode == null && mode == null){
       elementWithoutMode = val;
       alert("You need to specify all the modes");
     }
+
     var klass = val.class.textContent.replace(/^\s+|\s+$/g, '').replace(/[\[|\]]/g, '');
-    text += key + "\t" + klass + "\t" + mode + "\n";
+    text += key + "\t" + klass + "\t" + mode
+
+    var old_mode = val.type_selector.old_mode;
+    if (old_mode)
+      text += "\t" + old_mode;
+
+    text += "\n";
   });
 
   if (elementWithoutMode != null){
@@ -185,9 +213,19 @@ function applyCSV(data) {
       var taxa = line[0];
       var klass = line[1];
       var mode = line[2].replace(/\*/g, '');
+      var old_mode = null;
+
+      if (line.length > 3)
+        old_mode = line[3].replace(/\*/g, '');
 
       if(elements[taxa] != undefined){
         elements[taxa].type_selector.changeMode(mode);
+
+        if (old_mode)
+          elements[taxa].type_selector.setOldMode(old_mode);
+        else
+          elements[taxa].type_selector.removeOldMode();
+
       } else {
         console.log(taxa + " " + mode);
       }
@@ -256,7 +294,7 @@ function openSVG(raw_svg) {
   });
 
   title = _.find(svg.selectAll("text"), function(el){
-    return el.attr("text").match(/^\</g);
+    return String(el.attr("text")).match(/^\</g);
   });
 
   if (title != null){
