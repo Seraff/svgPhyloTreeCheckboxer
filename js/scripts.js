@@ -96,14 +96,17 @@ function TypeSelector() {
       me.del_shape.after(me.old_mode_shape);
 
       me.ort_shape.click(function(){
+        modes_touched = true;
         me.changeMode('o');
       });
 
       me.par_shape.click(function(){
+        modes_touched = true;
         me.changeMode('p');
       });
 
       me.del_shape.click(function(){
+        modes_touched = true;
         me.changeMode('d');
       });
 
@@ -308,8 +311,13 @@ var svg = null;
 var elements = {};
 var title = null;
 var tsv_applied = false;
+var modes_touched = false;
 
 $('#openTreeButton').on("click", function(modal_e){
+  if (modes_touched && !confirm('Are you sure? All unsaved data will be lost.')){
+    return undefined;
+  }
+
   var file = $('#openTreeInput')[0].files[0];
 
   if (file != undefined){
@@ -321,6 +329,8 @@ $('#openTreeButton').on("click", function(modal_e){
 
     reader.onload = function(e){
       openSVG(reader.result);
+      modes_touched = false;
+
       $(modal_e.target).removeClass('disabled');
       $(modal_e.target).children("span").addClass('d-none');
 
