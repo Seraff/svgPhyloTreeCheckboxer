@@ -340,7 +340,7 @@ $('#openTreeButton').on("click", function(modal_e){
 });
 
 $('#applyCSVFileButton').on("click", function(modal_e){
-  if (tsv_applied && !confirm('Are you sure? All unsaved data will be lost.')){
+  if (tsv_applied && modes_touched && !confirm('Are you sure? All unsaved data will be lost.')){
     return undefined;
   }
 
@@ -372,6 +372,7 @@ function generateAndDownloadTsv(){
       filename = title + "_parsed.tsv";
     }
 
+    modes_touched = false;
     download(text, filename);
   }
 }
