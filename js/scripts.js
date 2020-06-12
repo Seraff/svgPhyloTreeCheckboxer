@@ -236,6 +236,7 @@ function applyCSV(data) {
   });
 
   tsv_applied = true;
+  modes_touched = false;
 }
 
 function extractTaxaName(full_name){
@@ -340,7 +341,7 @@ $('#openTreeButton').on("click", function(modal_e){
 });
 
 $('#applyCSVFileButton').on("click", function(modal_e){
-  if (tsv_applied && modes_touched && !confirm('Are you sure? All unsaved data will be lost.')){
+  if (modes_touched && !confirm('Are you sure? All unsaved data will be lost.')){
     return undefined;
   }
 
